@@ -39,6 +39,7 @@ import Globals
 import time
 import os
 import tempfile
+import LocalizerEnglish as Localizer
 from panda3d.core import WindowProperties
 
 print 'Gathering Data...'
@@ -66,6 +67,10 @@ transition.fadeIn(5)
 
 localAvatar = LocalAvatar.toonBody
 base.localAvatar = localAvatar
+
+toonColors = Localizer.toonColorDict
+colorNum = 0
+numColors = Localizer.numColors
 
 Music = loader.loadMusic('phase_3/audio/bgm/create_a_toon.mid')
 Music.setLoop(1)
@@ -98,28 +103,22 @@ CameraMove = camera.posInterval(1,
 CameraMoveSequence = Sequence(CameraMove)
 
 def goRight():
-    LocalAvatar.bodyNodes[0].setColor(1, 1, 1, 1)
-    LocalAvatar.bodyNodes[1].setColor(0.91, 0.1274, 0.1274, 1)
-    LocalAvatar.bodyNodes[2].setColor(0.91, 0.1274, 0.1274, 1)
-    LocalAvatar.bodyNodes[3].setColor(0.91, 0.1274, 0.1274, 1)
-    LocalAvatar.bodyNodes[4].setColor(0.91, 0.1274, 0.1274, 1)
-    LocalAvatar.bodyNodes[5].setColor(1, 1, 1, 1)
-    LocalAvatar.bodyNodes[6].setColor(0.91, 0.1274, 0.1274, 1)
-    LocalAvatar.bodyNodes[7].setColor(0.91, 0.1274, 0.1274, 1)
-    LocalAvatar.bodyNodes[8].setColor(0.91, 0.1274, 0.1274, 1)
-    LocalAvatar.bodyNodes[9].setColor(0.91, 0.1274, 0.1274, 1)
+    global colorNum
+    global numColors
+    for color in toonColors[colorNum]:
+       LocalAvatar.bodyNodes[color].setColor(toonColors[colorNum][color])
+    colorNum += 1
+    if colorNum > numColors:
+        colorNum = 0
 
 def goBack():
-    LocalAvatar.bodyNodes[0].setColor(1, 1, 1, 1)
-    LocalAvatar.bodyNodes[1].setColor(0.7286, 0.5612, 0.92, 1)
-    LocalAvatar.bodyNodes[2].setColor(0.7286, 0.5612, 0.92, 1)
-    LocalAvatar.bodyNodes[3].setColor(0.7286, 0.5612, 0.92, 1)
-    LocalAvatar.bodyNodes[4].setColor(0.7286, 0.5612, 0.92, 1)
-    LocalAvatar.bodyNodes[5].setColor(1, 1, 1, 1)
-    LocalAvatar.bodyNodes[6].setColor(0.7286, 0.5612, 0.92, 1)
-    LocalAvatar.bodyNodes[7].setColor(0.7286, 0.5612, 0.92, 1)
-    LocalAvatar.bodyNodes[8].setColor(0.7286, 0.5612, 0.92, 1)
-    LocalAvatar.bodyNodes[9].setColor(0.7286, 0.5612, 0.92, 1)
+    global colorNum
+    global numColors
+    for color in toonColors[colorNum]:
+       LocalAvatar.bodyNodes[color].setColor(toonColors[colorNum][color])
+    colorNum -= 1
+    if colorNum < 0:
+        colorNum = numColors
 
 def HprToon():
     toonSpin.start()
@@ -133,10 +132,10 @@ Text = OnscreenText(text = "Make A Toon", pos = (0, 0.75), font = mickeyFont, fg
 gui1 = loader.loadModel('phase_3/models/gui/create_a_toon_gui.bam')
 gui2 = loader.loadModel('phase_3/models/gui/gui_toongen.bam')
 guiNextUp = gui.find('**/tt_t_gui_mat_nextUp')
-oobeButton = DirectButton(clickSound=Globals.getClickSound(), rolloverSound=Globals.getRlvrSound(), geom = (gui1.find("**/CrtATn_R_Arrow_UP"), gui1.find("**/CrtATn_R_Arrow_DN"), gui1.find("**/CrtATn_R_Arrow_RLVR")), relief=None, hpr=(0, 0, 180), command=goRight)
+oobeButton = DirectButton(clickSound=Globals.getClickSound(), rolloverSound=Globals.getRlvrSound(), geom = (gui1.find("**/CrtATn_R_Arrow_UP"), gui1.find("**/CrtATn_R_Arrow_DN"), gui1.find("**/CrtATn_R_Arrow_RLVR")), relief=None, hpr=(0, 0, 180), command=goBack)
 oobeButton.setScale(1)
 oobeButton.setPos(-0.70,3,-0.25)
-goBackButton = DirectButton(clickSound=Globals.getClickSound(), rolloverSound=Globals.getRlvrSound(), geom = (gui1.find("**/CrtATn_R_Arrow_UP"), gui1.find("**/CrtATn_R_Arrow_DN"), gui1.find("**/CrtATn_R_Arrow_RLVR")), relief=None, command=goBack)
+goBackButton = DirectButton(clickSound=Globals.getClickSound(), rolloverSound=Globals.getRlvrSound(), geom = (gui1.find("**/CrtATn_R_Arrow_UP"), gui1.find("**/CrtATn_R_Arrow_DN"), gui1.find("**/CrtATn_R_Arrow_RLVR")), relief=None, command=goRight)
 goBackButton.setScale(1)
 goBackButton.setPos(0.80,3,-0.25)
 spinButton = DirectButton(clickSound=Globals.getClickSound(), rolloverSound=Globals.getRlvrSound(), geom = (gui1.find("**/CrtATn_R_Arrow_UP"), gui1.find("**/CrtATn_R_Arrow_DN"), gui1.find("**/CrtATn_R_Arrow_RLVR")), relief=None, command=HprToon)
