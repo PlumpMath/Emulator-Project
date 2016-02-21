@@ -52,113 +52,101 @@ tempdir = tempfile.mkdtemp()
 wp.setTitle('Toontown Emulator')
 wp.setCursorFilename('toonmono.cur')
 wp.setIconFilename('icon.ico')
-
-notify = DirectNotifyGlobal.directNotify.newCategory("Starting Make A Toon.")
-
 base.win.requestProperties( wp )
 base.setAspectRatio(1.3333333334)
 base.camera.hide()
 base.camera.setPos(-0.30, -11, 3)
 base.camera.setHpr(-3, 0, 0)
-transition = Transitions(loader)
-transition.irisIn(1)
-transition.fadeIn(5)
+class MakeAToon:
+    def __init__(self):
+        self.notify = DirectNotifyGlobal.directNotify.newCategory("Starting Make A Toon.")
+        self.localAvatar = LocalAvatar.toonBody
+        base.localAvatar = self.localAvatar
+        self.toonColors = Localizer.toonColorDict
+        self.colorNum = 0
+        self.numColors = Localizer.numColors
+        self.MakeAToonText = Localizer.MakeAToonText
+        self.Mickey = Localizer.Mickey
+        self.mickeyFont = loader.loadFont('phase_3/models/fonts/MickeyFont.bam')
+        self.Text = OnscreenText(text = "Make A Toon", pos = (0, 0.75), font = self.mickeyFont, fg = (1, 0, 0, 1),scale=(0.2, 0.2, 0.2))
+        self.gui = loader.loadModel('phase_3/models/gui/tt_m_gui_mat_mainGui.bam')
+        self.gui.flattenMedium()
+        self.gui1 = loader.loadModel('phase_3/models/gui/create_a_toon_gui.bam')
+        self.gui2 = loader.loadModel('phase_3/models/gui/gui_toongen.bam')
+        self.guiNextUp = self.gui.find('**/tt_t_gui_mat_nextUp')
+        self.transition = Transitions(loader)
+        self.transition.irisIn(1)
+        self.transition.fadeIn(5)
+        self.load()
 
-
-localAvatar = LocalAvatar.toonBody
-base.localAvatar = localAvatar
-
-toonColors = Localizer.toonColorDict
-colorNum = 0
-numColors = Localizer.numColors
-
-Music = loader.loadMusic('phase_3/audio/bgm/create_a_toon.mid')
-Music.setLoop(1)
-MusicVolume = (0.4)
-Music.play()
-Music.setVolume(MusicVolume)
-base.localAvatar.setPos(0.80, 2, 0)
-base.localAvatar.setHpr(176, 0, 0)
-LocalAvatar.setMovementAnimation('neutral')
-room = loader.loadModel('phase_3/models/gui/create_a_toon.bam')
-room.reparentTo(render)
-room.find('**/sewing_machine').removeNode()
-room.find('**/drafting_table').removeNode()
-room.find("**/wall_floor").setColor(0.7294117647058824, 0.5490196078431373, 0.2392156862745098, 1)
-room.setName("Room")
-ee = DirectFrame(pos=(-1, 1, 1), frameSize=(-.01, 0.01, -.01, 0.01), frameColor=(0, 0, 0, 0.05), state='normal')
-ee.bind(DGG.B1PRESS, lambda x, ee = ee: self.toggleSlide())
-eee = ee
-gui = loader.loadModel('phase_3/models/gui/tt_m_gui_mat_mainGui.bam')
-gui.flattenMedium()
-toonSpin = localAvatar.hprInterval(2, Vec3(540, 0, 0))
-toonSpin2 = localAvatar.hprInterval(2, Vec3(180, 0, 0))
-MakeAToonText = 'Make a Toon to Play!'
-Mickey = 'Mickey.TTF'
-
-CameraMove = camera.posInterval(1,
+    def load(self):
+        self.Music = loader.loadMusic('phase_3/audio/bgm/create_a_toon.mid')
+        self.Music.setLoop(1)
+        self.MusicVolume = (0.4)
+        self.Music.play()
+        self.Music.setVolume(self.MusicVolume)
+        base.localAvatar.setPos(0.80, 2, 0)
+        base.localAvatar.setHpr(176, 0, 0)
+        LocalAvatar.setMovementAnimation('neutral')
+        self.room = loader.loadModel('phase_3/models/gui/create_a_toon.bam')
+        self.room.reparentTo(render)
+        self.room.find('**/sewing_machine').removeNode()
+        self.room.find('**/drafting_table').removeNode()
+        self.room.find("**/wall_floor").setColor(0.7294117647058824, 0.5490196078431373, 0.2392156862745098, 1)
+        self.room.setName("Room")
+        self.ee = DirectFrame(pos=(-1, 1, 1), frameSize=(-.01, 0.01, -.01, 0.01), frameColor=(0, 0, 0, 0.05), state='normal')
+        self.ee.bind(DGG.B1PRESS, lambda x, ee = self.ee: self.toggleSlide())
+        self.eee = self.ee
+        self.toonSpin = base.localAvatar.hprInterval(2, Vec3(540, 0, 0))
+        self.toonSpin2 = base.localAvatar.hprInterval(2, Vec3(180, 0, 0))
+        self.CameraMove = camera.posInterval(1,
                                   Point3(-0.50, -11, 3),
                                   startPos=Point3(1, -11, 3))
-
-CameraMoveSequence = Sequence(CameraMove)
-
-def goRight():
-    global colorNum
-    global numColors
-    for color in toonColors[colorNum]:
-       LocalAvatar.bodyNodes[color].setColor(toonColors[colorNum][color])
-    colorNum += 1
-    if colorNum > numColors:
-        colorNum = 0
-
-def goBack():
-    global colorNum
-    global numColors
-    for color in toonColors[colorNum]:
-       LocalAvatar.bodyNodes[color].setColor(toonColors[colorNum][color])
-    colorNum -= 1
-    if colorNum < 0:
-        colorNum = numColors
-
-def HprToon():
-    toonSpin.start()
-
-def HprToon2():
-    toonSpin2.start()
-
-mickeyFont = loader.loadFont('phase_3/models/fonts/MickeyFont.bam')
-Text = OnscreenText(text = "Make A Toon", pos = (0, 0.75), font = mickeyFont, fg = (1, 0, 0, 1),
-                scale=(0.2, 0.2, 0.2)),
-gui1 = loader.loadModel('phase_3/models/gui/create_a_toon_gui.bam')
-gui2 = loader.loadModel('phase_3/models/gui/gui_toongen.bam')
-guiNextUp = gui.find('**/tt_t_gui_mat_nextUp')
-oobeButton = DirectButton(clickSound=Globals.getClickSound(), rolloverSound=Globals.getRlvrSound(), geom = (gui1.find("**/CrtATn_R_Arrow_UP"), gui1.find("**/CrtATn_R_Arrow_DN"), gui1.find("**/CrtATn_R_Arrow_RLVR")), relief=None, hpr=(0, 0, 180), command=goBack)
-oobeButton.setScale(1)
-oobeButton.setPos(-0.70,3,-0.25)
-goBackButton = DirectButton(clickSound=Globals.getClickSound(), rolloverSound=Globals.getRlvrSound(), geom = (gui1.find("**/CrtATn_R_Arrow_UP"), gui1.find("**/CrtATn_R_Arrow_DN"), gui1.find("**/CrtATn_R_Arrow_RLVR")), relief=None, command=goRight)
-goBackButton.setScale(1)
-goBackButton.setPos(0.80,3,-0.25)
-spinButton = DirectButton(clickSound=Globals.getClickSound(), rolloverSound=Globals.getRlvrSound(), geom = (gui1.find("**/CrtATn_R_Arrow_UP"), gui1.find("**/CrtATn_R_Arrow_DN"), gui1.find("**/CrtATn_R_Arrow_RLVR")), relief=None, command=HprToon)
-spinButton.setScale(0.60)
-spinButton.setPos(0.50,2,-0.50)
-spinButton2 = DirectButton(clickSound=Globals.getClickSound(), rolloverSound=Globals.getRlvrSound(), geom = (gui1.find("**/CrtATn_R_Arrow_UP"), gui1.find("**/CrtATn_R_Arrow_DN"), gui1.find("**/CrtATn_R_Arrow_RLVR")), relief=None, hpr=(0, 0, 180), command=HprToon2)
-spinButton2.setScale(0.60)
-spinButton2.setPos(-0.40,2,-0.50)
-
-def CameraButton():
-    transition.irisIn()
-    transition.fadeOut(1)
-    Music.stop()
-
-
-OK = DirectButton(clickSound=Globals.getClickSound(), rolloverSound=Globals.getRlvrSound(), geom=(gui2.find("**/tt_t_gui_mat_okUp"), gui2.find("**/tt_t_gui_mat_okDown")), pos=(0.90,1,-0.80), relief=None, command=CameraButton)
-
-ToonEnter = localAvatar.posInterval(1,
+        self.CameraMoveSequence = Sequence(self.CameraMove)
+        self.ToonEnter = base.localAvatar.posInterval(1,
                                   Point3(0.60, 2, 0),
                                   startPos=Point3(-4, 2, 0))
+        self.ToonEnterPace = Sequence(self.ToonEnter)
+        self.ToonEnter.start()
+        self.oobeButton = DirectButton(clickSound=Globals.getClickSound(), rolloverSound=Globals.getRlvrSound(), geom = (self.gui1.find("**/CrtATn_R_Arrow_UP"), self.gui1.find("**/CrtATn_R_Arrow_DN"), self.gui1.find("**/CrtATn_R_Arrow_RLVR")), relief=None, hpr=(0, 0, 180), command=self.goBack)
+        self.oobeButton.setScale(1)
+        self.oobeButton.setPos(-0.70,3,-0.25)
+        self.goBackButton = DirectButton(clickSound=Globals.getClickSound(), rolloverSound=Globals.getRlvrSound(), geom = (self.gui1.find("**/CrtATn_R_Arrow_UP"), self.gui1.find("**/CrtATn_R_Arrow_DN"), self.gui1.find("**/CrtATn_R_Arrow_RLVR")), relief=None, command=self.goRight)
+        self.goBackButton.setScale(1)
+        self.goBackButton.setPos(0.80,3,-0.25)
+        self.spinButton = DirectButton(clickSound=Globals.getClickSound(), rolloverSound=Globals.getRlvrSound(), geom = (self.gui1.find("**/CrtATn_R_Arrow_UP"), self.gui1.find("**/CrtATn_R_Arrow_DN"), self.gui1.find("**/CrtATn_R_Arrow_RLVR")), relief=None, command=self.HprToon)
+        self.spinButton.setScale(0.60)
+        self.spinButton.setPos(0.50,2,-0.50)
+        self.spinButton2 = DirectButton(clickSound=Globals.getClickSound(), rolloverSound=Globals.getRlvrSound(), geom = (self.gui1.find("**/CrtATn_R_Arrow_UP"), self.gui1.find("**/CrtATn_R_Arrow_DN"), self.gui1.find("**/CrtATn_R_Arrow_RLVR")), relief=None, hpr=(0, 0, 180), command=self.HprToon2)
+        self.spinButton2.setScale(0.60)
+        self.spinButton2.setPos(-0.40,2,-0.50)
+        self.OK = DirectButton(clickSound=Globals.getClickSound(), rolloverSound=Globals.getRlvrSound(), geom=(self.gui2.find("**/tt_t_gui_mat_okUp"), self.gui2.find("**/tt_t_gui_mat_okDown")), pos=(0.90,1,-0.80), relief=None, command=self.CameraButton)
 
-ToonEnterPace = Sequence(ToonEnter)
-ToonEnter.start()
 
+    def goRight(self):
+        for color in self.toonColors[self.colorNum]:
+            LocalAvatar.bodyNodes[color].setColor(self.toonColors[self.colorNum][color])
+        self.colorNum += 1
+        if self.colorNum > self.numColors:
+            self.colorNum = 0
 
+    def goBack(self):
+        for color in self.toonColors[self.colorNum]:
+            LocalAvatar.bodyNodes[color].setColor(self.toonColors[self.colorNum][color])
+        self.colorNum -= 1
+        if self.colorNum < 0:
+            self.colorNum = self.numColors
+    
+    def HprToon(self):
+        self.toonSpin.start()
+
+    def HprToon2(self):
+        self.toonSpin2.start()
+
+    def CameraButton(self):
+        self.transition.irisIn()
+        self.transition.fadeOut(1)
+        self.Music.stop()
+
+MakeAToon = MakeAToon()
 run()

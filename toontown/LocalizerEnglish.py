@@ -1,4 +1,5 @@
 MakeAToonText = 'Make a Toon to Play!'
+Mickey = 'Mickey.TTF'
 colorNum = 0
 numColors = 1
 toonColorDict = {
