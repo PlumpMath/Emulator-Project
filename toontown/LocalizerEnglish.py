@@ -1,7 +1,8 @@
 MakeAToonText = 'Make a Toon to Play!'
 Mickey = 'Mickey.TTF'
 colorNum = 0
-numColors = 1
+
+numColors = 0
 toonColorDict = {
 	0: {
 		0: (1,1,1,1),
@@ -28,3 +29,7 @@ toonColorDict = {
 		9: (0.91, 0.1274, 0.1274, 1)
 	}
 }
+
+for color in toonColorDict:
+	numColors += 1
+numColors -= 1
