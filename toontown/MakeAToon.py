@@ -1,19 +1,5 @@
-from SocketServer import *
-from socket import *
-import SocketServer
-import commands
-import compileall
-import ConfigParser
 from toontown import AnimationGlobals
 from toontown import LocalAvatar
-import Cookie
-import socket
-from subprocess import call
-import BaseHTTPServer
-import audiodev
-import SimpleHTTPServer
-import ctypes
-from sys import argv
 from math import pi, sin, cos
 from direct.showbase.ShowBase import ShowBase
 from direct.task import Task
@@ -57,7 +43,9 @@ base.setAspectRatio(1.3333333334)
 base.camera.hide()
 base.camera.setPos(-0.30, -11, 3)
 base.camera.setHpr(-3, 0, 0)
+
 class MakeAToon:
+    
     def __init__(self):
         self.notify = DirectNotifyGlobal.directNotify.newCategory("Starting Make A Toon.")
         self.localAvatar = LocalAvatar.toonBody
@@ -108,20 +96,25 @@ class MakeAToon:
                                   startPos=Point3(-4, 2, 0))
         self.ToonEnterPace = Sequence(self.ToonEnter)
         self.ToonEnter.start()
-        self.oobeButton = DirectButton(clickSound=Globals.getClickSound(), rolloverSound=Globals.getRlvrSound(), geom = (self.gui1.find("**/CrtATn_R_Arrow_UP"), self.gui1.find("**/CrtATn_R_Arrow_DN"), self.gui1.find("**/CrtATn_R_Arrow_RLVR")), relief=None, hpr=(0, 0, 180), command=self.goBack)
-        self.oobeButton.setScale(1)
-        self.oobeButton.setPos(-0.70,3,-0.25)
-        self.goBackButton = DirectButton(clickSound=Globals.getClickSound(), rolloverSound=Globals.getRlvrSound(), geom = (self.gui1.find("**/CrtATn_R_Arrow_UP"), self.gui1.find("**/CrtATn_R_Arrow_DN"), self.gui1.find("**/CrtATn_R_Arrow_RLVR")), relief=None, command=self.goRight)
-        self.goBackButton.setScale(1)
-        self.goBackButton.setPos(0.80,3,-0.25)
+        self.goLeftButton = DirectButton(clickSound=Globals.getClickSound(), rolloverSound=Globals.getRlvrSound(), geom = (self.gui1.find("**/CrtATn_R_Arrow_UP"), self.gui1.find("**/CrtATn_R_Arrow_DN"), self.gui1.find("**/CrtATn_R_Arrow_RLVR")), relief=None, hpr=(0, 0, 180), command=self.goRight)
+        self.goLeftButton.setScale(1)
+        self.goLeftButton.setPos(-0.70,3,-0.25)
+        self.goLeftButton.hide()
+        self.goRightButton = DirectButton(clickSound=Globals.getClickSound(), rolloverSound=Globals.getRlvrSound(), geom = (self.gui1.find("**/CrtATn_R_Arrow_UP"), self.gui1.find("**/CrtATn_R_Arrow_DN"), self.gui1.find("**/CrtATn_R_Arrow_RLVR")), relief=None, command=self.goRight)
+        self.goRightButton.setScale(1)
+        self.goRightButton.setPos(0.80,3,-0.25)
+        self.goRightButton.hide()
         self.spinButton = DirectButton(clickSound=Globals.getClickSound(), rolloverSound=Globals.getRlvrSound(), geom = (self.gui1.find("**/CrtATn_R_Arrow_UP"), self.gui1.find("**/CrtATn_R_Arrow_DN"), self.gui1.find("**/CrtATn_R_Arrow_RLVR")), relief=None, command=self.HprToon)
         self.spinButton.setScale(0.60)
         self.spinButton.setPos(0.50,2,-0.50)
         self.spinButton2 = DirectButton(clickSound=Globals.getClickSound(), rolloverSound=Globals.getRlvrSound(), geom = (self.gui1.find("**/CrtATn_R_Arrow_UP"), self.gui1.find("**/CrtATn_R_Arrow_DN"), self.gui1.find("**/CrtATn_R_Arrow_RLVR")), relief=None, hpr=(0, 0, 180), command=self.HprToon2)
         self.spinButton2.setScale(0.60)
         self.spinButton2.setPos(-0.40,2,-0.50)
-        self.OK = DirectButton(clickSound=Globals.getClickSound(), rolloverSound=Globals.getRlvrSound(), geom=(self.gui2.find("**/tt_t_gui_mat_okUp"), self.gui2.find("**/tt_t_gui_mat_okDown")), pos=(0.90,1,-0.80), relief=None, command=self.CameraButton)
-
+        #self.OK = DirectButton(clickSound=Globals.getClickSound(), rolloverSound=Globals.getRlvrSound(), geom=(self.gui2.find("**/tt_t_gui_mat_okUp"), self.gui2.find("**/tt_t_gui_mat_okDown")), pos=(1.10,1,-0.80), relief=None, command=self.goForward1)
+        self.Next = DirectButton(clickSound=Globals.getClickSound(), rolloverSound=Globals.getRlvrSound(), geom=(self.gui2.find("**/tt_t_gui_mat_nextUp"), self.gui2.find("**/tt_t_gui_mat_nextDown")), pos=(1.10,1,-0.80), scale=(0.58, 0.58, 0.58), relief=None, command=self.goForward1)
+        self.goBackButton1 = DirectButton(clickSound=Globals.getClickSound(), rolloverSound=Globals.getRlvrSound(), geom=(self.gui2.find("**/tt_t_gui_mat_nextUp"), self.gui2.find("**/tt_t_gui_mat_nextDown")), pos=(-1,1,-0.80), scale=(0.58, 0.58, 0.58), hpr=(0, 0, 180), relief=None, command=self.goBack1)
+        self.goBackButton1.hide()
+        self.Cancel = DirectButton(clickSound=Globals.getClickSound(), rolloverSound=Globals.getRlvrSound(), geom=(self.gui2.find("**/tt_t_gui_mat_closeUp"), self.gui2.find("**/tt_t_gui_mat_closeDown")), pos=(-1,1,-0.80), scale=(1, 1, 1), hpr=(0, 0, 180), relief=None, command=self.Cancel)
 
     def goRight(self):
         for color in self.toonColors[self.colorNum]:
@@ -130,12 +123,23 @@ class MakeAToon:
         if self.colorNum > self.numColors:
             self.colorNum = 0
 
-    def goBack(self):
+    def goLeft(self):
         for color in self.toonColors[self.colorNum]:
             LocalAvatar.bodyNodes[color].setColor(self.toonColors[self.colorNum][color])
         self.colorNum -= 1
         if self.colorNum < 0:
             self.colorNum = self.numColors
+
+    def goBack1(self):
+        self.goLeftButton.hide()
+        self.goRightButton.hide()
+        self.goBackButton1.hide()
+        self.Cancel.show()
+
+    def Cancel(self):
+        self.transition.irisOut()
+        self.Cancel.hide()
+        self.Music.stop()
     
     def HprToon(self):
         self.toonSpin.start()
@@ -143,10 +147,17 @@ class MakeAToon:
     def HprToon2(self):
         self.toonSpin2.start()
 
-    def CameraButton(self):
+    def goForward1(self):
+        self.goRightButton.show()
+        self.goLeftButton.show()
+        self.goBackButton1.show()
+        self.Cancel.hide()
+
+
+    '''def CameraButton(self):
         self.transition.irisIn()
         self.transition.fadeOut(1)
-        self.Music.stop()
+        self.Music.stop()'''
 
 MakeAToon = MakeAToon()
 run()
