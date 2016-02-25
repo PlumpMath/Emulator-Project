@@ -124,7 +124,6 @@ class MakeAToon:
         self.colorNum += 1
         if self.colorNum > self.numColors:
             self.colorNum = 0
-        print self.colorNum
 
     def goLeft(self):
         for color in self.toonColors[self.colorNum]:
@@ -132,7 +131,6 @@ class MakeAToon:
         self.colorNum -= 1
         if self.colorNum < 0:
             self.colorNum = self.numColors
-        print self.colorNum
 
     def goBack1(self):
         self.goLeftButton.hide()
