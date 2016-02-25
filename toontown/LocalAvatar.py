@@ -76,18 +76,8 @@ bodyNodes += [neck,
  arms,
  legs,
  feet]
-bodyNodes[0].setColor(1, 1, 1, 1)
-bodyNodes[1].setColor(0.264, 0.308, 0.676, 1)
-bodyNodes[2].setColor(0.264, 0.308, 0.676, 1)
-bodyNodes[3].setColor(0.264, 0.308, 0.676, 1)
-bodyNodes[4].setColor(0.264, 0.308, 0.676, 1)
-bodyNodes[5].setColor(1, 1, 1, 1)
-bodyNodes[6].setColor(0.264, 0.308, 0.676, 1)
-bodyNodes[7].setColor(0.264, 0.308, 0.676, 1)
-bodyNodes[8].setColor(0.264, 0.308, 0.676, 1)
-bodyNodes[9].setColor(0.264, 0.308, 0.676, 1)
 topTex = loader.loadTexture('phase_4/maps/tt_t_chr_avt_shirt_sellbotCrusher.jpg')
-botTex = loader.loadTexture('phase_4/maps/tt_t_chr_avt_shirtSleeve_sellbotCrusher.jpg')
+botTex = loader.loadTexture('phase_4/maps/tt_t_chr_avt_shorts_sellbotCrusher.jpg')
 sleeveTex = loader.loadTexture('phase_4/maps/tt_t_chr_avt_shirtSleeve_sellbotCrusher.jpg')
 shoes = loader.loadTexture('phase_4/maps/tt_t_chr_avt_acc_sho_athleticBlack.jpg')
 bodyNodes[3].setTexture(sleeveTex, 1)

@@ -59,6 +59,8 @@ class MakeAToon:
         self.Mickey = Localizer.Mickey
         self.mickeyFont = loader.loadFont('phase_3/models/fonts/MickeyFont.bam')
         self.Text = OnscreenText(text = "Make A Toon", pos = (0, 0.75), font = self.mickeyFont, fg = (1, 0, 0, 1),scale=(0.2, 0.2, 0.2))
+        self.Text2 = OnscreenText(text = "Choose Your Color", pos = (0, 0.75), font = self.mickeyFont, fg = (1, 0, 0, 1),scale=(0.2, 0.2, 0.2))
+        self.Text2.hide()
         self.gui = loader.loadModel('phase_3/models/gui/tt_m_gui_mat_mainGui.bam')
         self.gui.flattenMedium()
         self.gui1 = loader.loadModel('phase_3/models/gui/create_a_toon_gui.bam')
@@ -133,6 +135,8 @@ class MakeAToon:
             self.colorNum = self.numColors
 
     def goBack1(self):
+        self.Text.show()
+        self.Text2.hide()
         self.goLeftButton.hide()
         self.goRightButton.hide()
         self.goBackButton1.hide()
@@ -150,6 +154,8 @@ class MakeAToon:
         self.toonSpin2.start()
 
     def goForward1(self):
+        self.Text.hide()
+        self.Text2.show()
         self.goRightButton.show()
         self.goLeftButton.show()
         self.goBackButton1.show()
