@@ -98,7 +98,7 @@ class MakeAToon:
                                   startPos=Point3(-4, 2, 0))
         self.ToonEnterPace = Sequence(self.ToonEnter)
         self.ToonEnter.start()
-        self.goLeftButton = DirectButton(clickSound=Globals.getClickSound(), rolloverSound=Globals.getRlvrSound(), geom = (self.gui1.find("**/CrtATn_R_Arrow_UP"), self.gui1.find("**/CrtATn_R_Arrow_DN"), self.gui1.find("**/CrtATn_R_Arrow_RLVR")), relief=None, hpr=(0, 0, 180), command=self.goRight)
+        self.goLeftButton = DirectButton(clickSound=Globals.getClickSound(), rolloverSound=Globals.getRlvrSound(), geom = (self.gui1.find("**/CrtATn_R_Arrow_UP"), self.gui1.find("**/CrtATn_R_Arrow_DN"), self.gui1.find("**/CrtATn_R_Arrow_RLVR")), relief=None, hpr=(0, 0, 180), command=self.goLeft)
         self.goLeftButton.setScale(1)
         self.goLeftButton.setPos(-0.70,3,-0.25)
         self.goLeftButton.hide()
@@ -124,6 +124,7 @@ class MakeAToon:
         self.colorNum += 1
         if self.colorNum > self.numColors:
             self.colorNum = 0
+        print self.colorNum
 
     def goLeft(self):
         for color in self.toonColors[self.colorNum]:
@@ -131,6 +132,7 @@ class MakeAToon:
         self.colorNum -= 1
         if self.colorNum < 0:
             self.colorNum = self.numColors
+        print self.colorNum
 
     def goBack1(self):
         self.goLeftButton.hide()
