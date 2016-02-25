@@ -76,9 +76,12 @@ bodyNodes += [neck,
  arms,
  legs,
  feet]
-topTex = loader.loadTexture('phase_4/maps/tt_t_chr_avt_shirt_sellbotCrusher.jpg')
-botTex = loader.loadTexture('phase_4/maps/tt_t_chr_avt_shorts_sellbotCrusher.jpg')
-sleeveTex = loader.loadTexture('phase_4/maps/tt_t_chr_avt_shirtSleeve_sellbotCrusher.jpg')
+#topTex = loader.loadTexture('phase_4/maps/tt_t_chr_avt_shirt_sellbotCrusher.jpg')
+topTex = loader.loadTexture('phase_3/maps/desat_shirt_19.jpg')
+#botTex = loader.loadTexture('phase_4/maps/tt_t_chr_avt_shorts_sellbotCrusher.jpg')
+botTex = loader.loadTexture('phase_3/maps/desat_shorts_2.jpg')
+#sleeveTex = loader.loadTexture('phase_4/maps/tt_t_chr_avt_shirtSleeve_sellbotCrusher.jpg')
+sleeveTex = loader.loadTexture('phase_3/maps/desat_sleeve_19.jpg')
 shoes = loader.loadTexture('phase_4/maps/tt_t_chr_avt_acc_sho_athleticBlack.jpg')
 bodyNodes[3].setTexture(sleeveTex, 1)
 bodyNodes[4].setTexture(topTex, 1)
