@@ -26,6 +26,7 @@ import time
 import os
 import tempfile
 import LocalizerEnglish as Localizer
+from random import randint
 from panda3d.core import WindowProperties
 
 print 'Gathering Data...'
@@ -51,8 +52,9 @@ class MakeAToon:
         self.localAvatar = LocalAvatar.toonBody
         base.localAvatar = self.localAvatar
         self.toonColors = Localizer.toonColorDict
-        self.colorNum = 0
+        self.colorNum = randint(0, Localizer.numColors)
         self.numColors = Localizer.numColors
+        self.goRight()
         self.MakeAToonText = Localizer.MakeAToonText
         self.Mickey = Localizer.Mickey
         self.mickeyFont = loader.loadFont('phase_3/models/fonts/MickeyFont.bam')
