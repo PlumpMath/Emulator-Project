@@ -57,6 +57,12 @@ class MakeAToon:
         self.goRight()
         self.MakeAToonText = Localizer.MakeAToonText
         self.Mickey = Localizer.Mickey
+        self.transition = Transitions(loader)
+        self.transition.irisIn(1)
+        self.transition.fadeIn(5)
+        self.load()
+
+    def load(self):
         self.mickeyFont = loader.loadFont('phase_3/models/fonts/MickeyFont.bam')
         self.Text = OnscreenText(text = "Make A Toon", pos = (0, 0.75), font = self.mickeyFont, fg = (1, 0, 0, 1),scale=(0.2, 0.2, 0.2))
         self.Text2 = OnscreenText(text = "Choose Your Color", pos = (0, 0.75), font = self.mickeyFont, fg = (1, 0, 0, 1),scale=(0.2, 0.2, 0.2))
@@ -66,12 +72,6 @@ class MakeAToon:
         self.gui1 = loader.loadModel('phase_3/models/gui/create_a_toon_gui.bam')
         self.gui2 = loader.loadModel('phase_3/models/gui/gui_toongen.bam')
         self.guiNextUp = self.gui.find('**/tt_t_gui_mat_nextUp')
-        self.transition = Transitions(loader)
-        self.transition.irisIn(1)
-        self.transition.fadeIn(5)
-        self.load()
-
-    def load(self):
         self.Music = loader.loadMusic('phase_3/audio/bgm/create_a_toon.mid')
         self.Music.setLoop(1)
         self.MusicVolume = (0.4)
@@ -146,6 +146,7 @@ class MakeAToon:
         self.transition.irisOut()
         self.Cancel.hide()
         self.Music.stop()
+
     
     def HprToon(self):
         self.toonSpin.start()
